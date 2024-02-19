@@ -1,16 +1,22 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class Main {
 
     public static void main(String[] args) {
-        int[] nums_to_sort = {10,9,8,7,6,5,4,3,2,1,0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10};
+        LinkedList<Integer> nums_to_sort = new LinkedList<>();
+        for(int i = -100; i <= 10; ++i) {
+            nums_to_sort.add(i);
+        }
 
         // Set an adjustment if there's a negative
-        int min_num = Math.min(0, Arrays.stream(nums_to_sort).min().getAsInt()) * -1;
+        int min_num = Collections.min(nums_to_sort);
+        int array_length = nums_to_sort.size();
 
         for(int num : nums_to_sort)
         {
-            SortingThread sort_thread = new SortingThread(num, min_num);
+            SortingThread sort_thread = new SortingThread(num, min_num, array_length);
             Thread thread = new Thread(sort_thread);
             thread.start();
 
@@ -23,11 +29,13 @@ public class Main {
 
         int num;
         int min_num;
+        int array_length;
 
 
-        SortingThread(int num, int min_num) {
+        SortingThread(int num, int min_num, int array_length) {
             this.num = num;
             this.min_num = min_num;
+            this.array_length = array_length;
         }
 
 
@@ -36,7 +44,7 @@ public class Main {
 
             try
             {
-                Thread.sleep((this.num + min_num) * 100L);
+                Thread.sleep((long) (this.num - min_num) * array_length);
             }
             catch (InterruptedException e)
             {
